@@ -55,6 +55,216 @@ npm run dev:server
 npm run dev:frontend
 ```
 
+## Local Testing
+
+### Environment Setup
+
+1. Copy environment variables:
+```bash
+cp .env.example .env
+```
+
+2. Configure your `.env` file with:
+```env
+# Telegram Bot
+TELEGRAM_BOT_TOKEN=your_bot_token
+ADMIN_CHAT_ID=your_admin_chat_id
+
+# Server
+PORT=3000
+BASE_URL=http://localhost:3000
+WEBHOOK_URL=http://localhost:3000/telegram
+
+# Saleor
+SALEOR_API_URL=https://your-store.saleor.cloud/graphql/
+SALEOR_CHANNEL_TOKEN=your_channel_token
+```
+
+### Testing Without Telegram
+
+For local development without a real Telegram bot, use the mock environment:
+
+```typescript
+// In your development code
+import { mockTelegramEnv, retrieveLaunchParams } from '@tma.js/sdk';
+
+// Mock Telegram environment
+mockTelegramEnv({
+  launchParams: retrieveLaunchParams('mock-data-here'),
+  themeParams: {
+    bg_color: '#ffffff',
+    text_color: '#000000',
+  },
+});
+```
+
+### API Testing
+
+Test the backend API endpoints:
+
+```bash
+# Health check
+curl http://localhost:3000/
+
+# Get restaurants
+curl http://localhost:3000/api/restaurants
+
+# Get menu for restaurant
+curl http://localhost:3000/api/menu/1
+
+# Get products in category
+curl http://localhost:3000/api/products/1
+```
+
+### Frontend Testing
+
+Start the frontend dev server:
+```bash
+npm run dev:frontend
+```
+
+The app will be available at http://localhost:5173
+
+### Telegram Bot Testing
+
+For real Telegram testing, use ngrok for HTTPS tunneling:
+```bash
+# Install ngrok
+npm install -g ngrok
+
+# Start tunnel to local server
+ngrok http 3000 --subdomain=your-app
+
+# Set webhook with the ngrok URL
+curl -F "url=https://your-app.ngrok-free.app/telegram" \
+     https://api.telegram.org/bot<YOUR_BOT_TOKEN>/setWebhook
+```
+
+### Debugging
+
+Enable Eruda for mobile debugging:
+```bash
+# Add to your index.html in public/
+<script src="//cdn.jsdelivr.net/npm/eruda/eruda.js"></script>
+<script>eruda.init();</script>
+```
+
+### Test User
+
+For automated testing, use `id=0` as the test user ID.
+
+## Automated Tests
+
+This project includes automated tests using Jest and Supertest.
+
+### Installation
+
+```bash
+# Install test dependencies
+npm install --save-dev jest ts-jest supertest @types/jest @types/supertest
+```
+
+### Running Tests
+
+```bash
+# Run all tests
+npm test
+
+# Run tests in watch mode
+npm run test:watch
+
+# Run tests with coverage
+npm run test:coverage
+
+# Run specific test file
+npm run test:api
+npm run test:integration
+```
+
+### Test Files
+
+| File | Description |
+|------|-------------|
+| `tests/api.test.ts` | API endpoint tests |
+| `tests/integration.test.ts` | Integration tests |
+
+### Available Tests
+
+The test suite includes:
+
+1. **Saleor API Availability Tests**
+   - Check Saleor API connection
+   - Fetch restaurants from Saleor
+   - Handle Saleor API errors gracefully
+
+2. **Application Startup Tests**
+   - Server starts successfully
+   - All required API endpoints are available
+
+3. **Integration Tests**
+   - Health check endpoint
+   - API endpoints availability
+   - Saleor API health check status
+
+### Test Configuration
+
+The test setup is configured in `jest.config.js`:
+
+```javascript
+module.exports = {
+  preset: 'ts-jest',
+  testEnvironment: 'node',
+  roots: ['<rootDir>/tests'],
+  testMatch: ['**/tests/**/*.test.ts'],
+  collectCoverageFrom: ['src/**/*.ts'],
+  coverageDirectory: 'coverage',
+};
+```
+
+### Writing New Tests
+
+Add new test files in the `tests/` directory:
+
+```typescript
+import request from 'supertest';
+import app from '../src/server.js';
+
+describe('Feature Tests', () => {
+  test('should test specific feature', async () => {
+    const response = await request(app)
+      .get('/api/endpoint')
+      .expect(200);
+    
+    expect(response.body).toHaveProperty('expectedProperty');
+  });
+});
+```
+
+### Test Environment Variables
+
+For testing, ensure these variables are set in `.env`:
+
+```env
+SALEOR_API_URL=https://your-store.saleor.cloud/graphql/
+SALEOR_CHANNEL_TOKEN=your_channel_token
+```
+
+### CI/CD Integration
+
+Add tests to your CI pipeline:
+
+```yaml
+test:
+  runs-on: ubuntu-latest
+  steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+    - run: npm ci
+    - run: npm test
+```
+
 ## Production Build
 
 ```bash
