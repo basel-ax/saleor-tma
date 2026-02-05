@@ -340,3 +340,49 @@ body.loading {
     grid-template-columns: repeat(2, 1fr);
   }
 }
+
+/* Restaurant Selector */
+.restaurant-selector {
+  background: #fff;
+  border-radius: 12px;
+  padding: 16px;
+  margin: 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.restaurant-selector-label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.restaurant-selector-select {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 16px;
+  color: #333;
+  background: #fff;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.restaurant-selector-select:focus {
+  outline: none;
+  border-color: #4caf50;
+}
+
+.restaurant-selector-loading,
+.restaurant-selector-error {
+  text-align: center;
+  padding: 16px;
+  color: #666;
+  font-size: 14px;
+}
+
+.restaurant-selector-error {
+  color: #ff6b6b;
+}

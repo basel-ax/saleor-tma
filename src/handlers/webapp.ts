@@ -17,21 +17,34 @@ const products: Record<number, { name: string; emoji: string; pricing: { priceRa
   12: { name: 'Flan', emoji: '🍮', pricing: { priceRange: { start: { gross: { amount: 799 } } } } }
 };
 
+// Fallback restaurants
+const restaurants: Record<string, { name: string }> = {
+  '1': { name: 'Main Cafe' },
+  '2': { name: 'Burger Palace' },
+  '3': { name: 'Pizza House' },
+};
+
 class WebAppHandlers {
   static async handleMakeOrder(webAppData: WebAppData): Promise<ApiResponse> {
     const userId = webAppData.user.id;
     const orderData = webAppData.data.order_data as string;
     const comment = webAppData.data.comment as string | undefined;
+    const restaurantId = webAppData.data.restaurant_id as string | undefined;
 
     // Parse order data
     const order = JSON.parse(orderData);
     
+    // Get restaurant name
+    const restaurantName = restaurantId && restaurants[restaurantId] 
+      ? restaurants[restaurantId].name 
+      : 'Cafe';
+
     // Build order text
     let orderText = '';
     for (const item of order) {
       const product = products[item.id];
       if (product) {
-        orderText += `${item.count}x ${product.name} $${(product.pricing.priceRange.start.gross.amount / 100).toFixed(2)}\n`;
+        orderText += `${item.count}x ${product.name} ${(product.pricing.priceRange.start.gross.amount / 100).toFixed(2)}\n`;
       }
     }
 
@@ -41,7 +54,7 @@ class WebAppHandlers {
 
     await telegramService.sendMessage(
       userId,
-      "Your order has been placed successfully! 🍟\n\n" +
+      `Your order from ${restaurantName} has been placed successfully! 🍟\n\n` +
       "Your order is:\n`" + orderText + "`\n" +
       "Your order will be delivered to you in 30 minutes. 🚚",
       { parse_mode: 'Markdown' }

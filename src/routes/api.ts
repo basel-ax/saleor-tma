@@ -6,10 +6,22 @@ import type { ApiResponse as ApiResponseType } from '../types/index.js';
 
 const router = Router();
 
+// Get restaurants/shops
+router.get('/restaurants', async (req: Request, res: Response) => {
+  try {
+    const restaurants = await saleorService.getShops();
+    res.json({ ok: true, data: restaurants });
+  } catch (error) {
+    console.error('Error fetching restaurants:', error);
+    res.status(500).json({ ok: false, error: (error as Error).message });
+  }
+});
+
 // Get products from Saleor
 router.get('/products', async (req: Request, res: Response) => {
   try {
-    const products = await saleorService.getProducts();
+    const shopId = req.query.shopId as string | undefined;
+    const products = await saleorService.getProducts(20, shopId);
     res.json({ ok: true, data: products });
   } catch (error) {
     console.error('Error fetching products:', error);

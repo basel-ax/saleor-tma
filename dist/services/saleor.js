@@ -1,20 +1,16 @@
 import { GraphQLClient } from 'graphql-request';
 import config from '../config/index.js';
-import type { ProductResponse, RestaurantResponse } from '../types/index.js';
-
 class SaleorService {
-  private client: GraphQLClient;
-
-  constructor() {
-    this.client = new GraphQLClient(config.saleor.apiUrl, {
-      headers: {
-        Authorization: `Bearer ${config.saleor.channelToken}`,
-      },
-    });
-  }
-
-  async getShops(): Promise<RestaurantResponse> {
-    const query = `
+    client;
+    constructor() {
+        this.client = new GraphQLClient(config.saleor.apiUrl, {
+            headers: {
+                Authorization: `Bearer ${config.saleor.channelToken}`,
+            },
+        });
+    }
+    async getShops() {
+        const query = `
       query GetShops {
         shops(first: 20) {
           edges {
@@ -28,12 +24,10 @@ class SaleorService {
         }
       }
     `;
-
-    return await this.client.request<RestaurantResponse>(query);
-  }
-
-  async getProducts(first: number = 20, shopId?: string): Promise<ProductResponse> {
-    const query = `
+        return await this.client.request(query);
+    }
+    async getProducts(first = 20, shopId) {
+        const query = `
       query GetProducts($first: Int!, $filter: ProductFilterInput) {
         products(first: $first, filter: $filter) {
           edges {
@@ -57,13 +51,11 @@ class SaleorService {
         }
       }
     `;
-
-    const filter = shopId ? { products: { shop: shopId } } : undefined;
-    return await this.client.request<ProductResponse>(query, { first, filter });
-  }
-
-  async getProductById(id: string) {
-    const query = `
+        const filter = shopId ? { products: { shop: shopId } } : undefined;
+        return await this.client.request(query, { first, filter });
+    }
+    async getProductById(id) {
+        const query = `
       query GetProduct($id: ID!) {
         product(id: $id) {
           id
@@ -82,12 +74,10 @@ class SaleorService {
         }
       }
     `;
-
-    return await this.client.request(query, { id });
-  }
-
-  async createCheckout(email: string, lines: Array<{ variantId: string; quantity: number }>) {
-    const mutation = `
+        return await this.client.request(query, { id });
+    }
+    async createCheckout(email, lines) {
+        const mutation = `
       mutation CreateCheckout($email: String!, $lines: [CheckoutLineInput!]!) {
         checkoutCreate(input: { email: $email, lines: $lines }) {
           checkout {
@@ -101,12 +91,10 @@ class SaleorService {
         }
       }
     `;
-
-    return await this.client.request(mutation, { email, lines });
-  }
-
-  async completeOrder(checkoutId: string) {
-    const mutation = `
+        return await this.client.request(mutation, { email, lines });
+    }
+    async completeOrder(checkoutId) {
+        const mutation = `
       mutation CreateOrder($checkoutId: ID!) {
         checkoutComplete(checkoutId: $checkoutId) {
           order {
@@ -126,10 +114,9 @@ class SaleorService {
         }
       }
     `;
-
-    return await this.client.request(mutation, { checkoutId });
-  }
+        return await this.client.request(mutation, { checkoutId });
+    }
 }
-
 export const saleorService = new SaleorService();
 export default saleorService;
+//# sourceMappingURL=saleor.js.map

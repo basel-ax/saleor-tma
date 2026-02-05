@@ -1,12 +1,19 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import type { Product } from '../types/index.js';
 import { useTMA } from './hooks/useTMA';
 import { CafePage } from './components/CafePage';
 import { OrderOverview } from './components/OrderOverview';
 import { StatusMessage } from './components/StatusMessage';
+import { RestaurantSelector } from './components/RestaurantSelector';
 
 // Fallback products matching the original cafe
-const fallbackProducts: Array<Product & { emoji: string; description: string }> = [
+const fallbackProducts: Array<{
+  id: string;
+  name: string;
+  emoji: string;
+  description: string;
+  slug: string;
+  pricing: { priceRange: { start: { gross: { amount: number; currency: string } } } }
+}> = [
   { id: '1', name: 'Burger', emoji: '🍔', description: 'Meat™', slug: 'burger', pricing: { priceRange: { start: { gross: { amount: 499, currency: 'USD' } } } } },
   { id: '2', name: 'Fries', emoji: '🍟', description: 'Po-ta-toes', slug: 'fries', pricing: { priceRange: { start: { gross: { amount: 149, currency: 'USD' } } } } },
   { id: '3', name: 'Hotdog', emoji: '🌭', description: '0% dog, 100% hot', slug: 'hotdog', pricing: { priceRange: { start: { gross: { amount: 349, currency: 'USD' } } } } },
@@ -35,6 +42,7 @@ function App() {
   const [status, setStatus] = useState<string | null>(null);
   const [comment, setComment] = useState('');
   const [isClosed, setIsClosed] = useState(false);
+  const [selectedRestaurantId, setSelectedRestaurantId] = useState<string | null>(null);
   const mainButtonCallbackRef = useRef<(() => void) | null>(null);
 
   // Check if running in Telegram
@@ -170,6 +178,7 @@ function App() {
           method: 'makeOrder',
           order_data: JSON.stringify(orderData),
           comment: comment,
+          restaurant_id: selectedRestaurantId,
         }),
       });
 
@@ -199,6 +208,13 @@ function App() {
     setStatus(null);
   };
 
+  const handleRestaurantSelect = (restaurantId: string) => {
+    setSelectedRestaurantId(restaurantId);
+    // Reset cart when changing restaurant
+    setCart(new Map());
+    setModeOrder(false);
+  };
+
   if (!initialized) {
     return (
       <div className="cafe-page cafe-items">
@@ -211,6 +227,10 @@ function App() {
 
   return (
     <div className={`cafe-app ${modeOrder ? 'order-mode' : ''}`}>
+      <RestaurantSelector
+        selectedRestaurantId={selectedRestaurantId}
+        onSelectRestaurant={handleRestaurantSelect}
+      />
       <CafePage
         products={products}
         cart={cart}

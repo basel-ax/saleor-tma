@@ -39,12 +39,32 @@ export interface Product {
   description?: string;
   slug: string;
   pricing: ProductPricing;
+  shop?: {
+    id: string;
+    name: string;
+  };
 }
 
 export interface ProductResponse {
   products: {
     edges: Array<{
       node: Product;
+    }>;
+  };
+}
+
+// Restaurant/Shop Types
+export interface Restaurant {
+  id: string;
+  name: string;
+  description?: string;
+  slug: string;
+}
+
+export interface RestaurantResponse {
+  shops: {
+    edges: Array<{
+      node: Restaurant;
     }>;
   };
 }
