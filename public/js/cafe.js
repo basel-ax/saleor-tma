@@ -317,7 +317,7 @@ var Cafe = {
     },
     apiRequest: function (method, data, onCallback) {
         var authData = Telegram.WebApp.initData || "";
-        $.ajax(Cafe.apiUrl, {
+        $.ajax('/api/webapp', {
             type: "POST",
             data: $.extend(data, { _auth: authData, method: method }),
             dataType: "json",

@@ -1,3 +1,11 @@
 .idea
 /.env
 /vendor
+
+.DS_Store
+/node_modules
+*-lock.*
+*.lock
+*.log
+.dev.vars
+.wrangler

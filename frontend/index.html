@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>DurgerKingExampleBot</title>
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no, viewport-fit=cover"/>
+  <meta name="format-detection" content="telephone=no"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+  <meta name="MobileOptimized" content="176"/>
+  <meta name="HandheldFriendly" content="True"/>
+  <meta name="robots" content="noindex, nofollow"/>
+  <link href="/css/cafe.css" rel="stylesheet">
+  <style>
+    /* Critical CSS to prevent flash of unstyled content */
+    body {
+      display: none;
+      background: #f5f5f5;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="module" src="/src/index.tsx"></script>
+  <script>
+    // Initialize TMA SDK
+    if (window.Telegram && window.Telegram.WebApp) {
+      window.Telegram.WebApp.ready();
+    }
+    
+    // Show body when ready
+    document.addEventListener('DOMContentLoaded', function() {
+      document.body.style.display = 'block';
+    });
+  </script>
+</body>
+</html>
