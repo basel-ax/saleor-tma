@@ -1,8 +1,6 @@
-# Saleor Telegram Mini App - TypeScript Migration
+# Saleor Telegram Mini App
 
-This project has been migrated to TypeScript with React frontend using `@tma.js/sdk-react`.
-
-## Migration Summary
+## Project Tech stack
 
 ### Backend (TypeScript)
 - ✅ All backend code converted from JavaScript to TypeScript
