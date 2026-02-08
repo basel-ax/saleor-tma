@@ -8,8 +8,8 @@ NODE_ENV = "production"
 
 # Environment-specific settings
 [env.production]
-name = "saleor-tma"
+name = "saleor-tma-api"
 
 [env.staging]
 name = "saleor-tma-api-staging"
-route = "api.staging.yourdomain.com/*"
+route = "saleor-tma-api.live-nature.net/*"
