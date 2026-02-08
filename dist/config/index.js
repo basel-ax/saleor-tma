@@ -16,4 +16,3 @@ export const config = {
     },
 };
 export default config;
-//# sourceMappingURL=index.js.map

@@ -1,7 +1,6 @@
 import TelegramBot from 'node-telegram-bot-api';
 import config from '../config/index.js';
 class TelegramService {
-    bot;
     constructor() {
         this.bot = new TelegramBot(config.telegram.botToken, { polling: false });
     }
@@ -20,4 +19,3 @@ class TelegramService {
 }
 export const telegramService = new TelegramService();
 export default telegramService;
-//# sourceMappingURL=telegram.js.map

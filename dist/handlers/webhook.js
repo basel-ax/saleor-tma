@@ -39,4 +39,3 @@ class WebhookHandler {
     }
 }
 export default WebhookHandler;
-//# sourceMappingURL=webhook.js.map

@@ -1,7 +1,6 @@
 import { GraphQLClient } from 'graphql-request';
 import config from '../config/index.js';
 class SaleorService {
-    client;
     constructor() {
         this.client = new GraphQLClient(config.saleor.apiUrl, {
             headers: {
@@ -116,7 +115,26 @@ class SaleorService {
     `;
         return await this.client.request(mutation, { checkoutId });
     }
+    async checkConnection() {
+        try {
+            const query = `
+        query Ping {
+          shops(first: 1) {
+            edges {
+              node {
+                id
+              }
+            }
+          }
+        }
+      `;
+            await this.client.request(query);
+            return true;
+        }
+        catch (error) {
+            return false;
+        }
+    }
 }
 export const saleorService = new SaleorService();
 export default saleorService;
-//# sourceMappingURL=saleor.js.map

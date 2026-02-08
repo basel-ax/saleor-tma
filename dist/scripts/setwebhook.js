@@ -12,4 +12,3 @@ dotenv.config();
         console.error('Failed to set webhook:', error);
     }
 })();
-//# sourceMappingURL=setwebhook.js.map

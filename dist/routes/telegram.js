@@ -13,4 +13,3 @@ router.post('/', async (req, res) => {
     }
 });
 export default router;
-//# sourceMappingURL=telegram.js.map

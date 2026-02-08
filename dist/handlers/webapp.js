@@ -79,4 +79,3 @@ class WebAppHandlers {
     }
 }
 export default WebAppHandlers;
-//# sourceMappingURL=webapp.js.map

@@ -47,4 +47,3 @@ class CommandHandlers {
     }
 }
 export default CommandHandlers;
-//# sourceMappingURL=commands.js.map

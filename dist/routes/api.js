@@ -56,4 +56,3 @@ router.post('/webapp', bodyParser.json(), async (req, res) => {
     }
 });
 export default router;
-//# sourceMappingURL=api.js.map
